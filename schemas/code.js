@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const dataSchema = new mongoose.Schema({
     type: {
         required: true,
-        type: String
+        type: String,
+        enum: ["code", "grant", "authorization_code", "access_token"]
     },
     code: {
         required: true,
