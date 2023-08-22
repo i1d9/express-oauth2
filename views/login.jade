@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    form(action="/login", method="post")   
+        label(for='email') email 
+        input(id="email",type="email", name="email", required=true)
+        label(for='password') password 
+        input(id="password",type="password", name="password", required=true)
+        button(type="submit",value='Sign In') 
