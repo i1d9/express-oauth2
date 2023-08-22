@@ -2,7 +2,7 @@ require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var session = require('express-session');
-
+var auth = require("./middlewares/auth")
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -15,6 +15,7 @@ var mongoose = require('mongoose');
 var database = require("./db");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var clientsRouter = require('./routes/client');
 
 var app = express();
 database.connectToServer();
@@ -45,6 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/client', auth.check_current_user, clientsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

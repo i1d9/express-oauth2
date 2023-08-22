@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-
-
 const dataSchema = new mongoose.Schema({
     secret: {
         required: true,
@@ -15,6 +13,15 @@ const dataSchema = new mongoose.Schema({
     scopes: {
         required: true,
         type: Array
+    },
+    redirect_uri: {
+        required: true,
+        type: String
+    },
+    type: {
+        required: true,
+        type: String,
+        enum: ["confidential", "public"]
     }
 })
 
