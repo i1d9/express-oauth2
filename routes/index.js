@@ -21,14 +21,27 @@ router.post('/login', function (req, res, next) {
 
 
 
-  bcrypt.compare(req.body.password, hash, function (err, result) {
-    if (result) {
-      // password is valid
-    }
+  UserModel.findOne({ 'email': req.body.email }).then((found_user) => {
+
+    bcrypt.compare(req.body.password, found_user.password, function (err, result) {
+      if (result) {
+        // password is valid
+        console.log("valid password");
+
+        req.session.current_user = found_user;
+        res.redirect('/');
+      } else {
+
+        res.render('login', { title: 'Login' });
+      }
+    });
+
+  }).catch((error) => {
+    console.log(error);
+
+    res.render('login', { title: 'Login' });
   });
 
-  console.log(req.body);
-  res.render('login', { title: 'Login' });
 });
 
 
@@ -42,7 +55,6 @@ router.get('/register', function (req, res, next) {
 
 /* POST register page. */
 router.post('/register', function (req, res, next) {
-  console.log(req.body);
 
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(req.body.password, salt, function (err, hash) {
@@ -54,9 +66,10 @@ router.post('/register', function (req, res, next) {
 
       user.save().then(savedUser => {
         console.log(savedUser);
-        res.render('login', { title: 'Create account' });
+        res.redirect('/login');
       }).catch((error) => {
         console.log(error);
+        res.render('register', { title: 'Create account' });
       });
 
     });
